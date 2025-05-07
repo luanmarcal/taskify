@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Righteous&family=Roboto:wght@100&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -120,4 +121,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1 {
+  font-family: 'Righteous', sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* reset styles */
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
