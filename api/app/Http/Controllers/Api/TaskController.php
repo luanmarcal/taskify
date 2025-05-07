@@ -18,7 +18,9 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = $this->taskService->getAllTasks();
+        $status = request()->get('status');
+
+        $tasks = $this->taskService->getAllTasks($status);
 
         return response([
             'data' => $tasks,

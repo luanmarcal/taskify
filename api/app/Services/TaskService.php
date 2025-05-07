@@ -15,10 +15,12 @@ class TaskService implements TaskServiceInterface
         $this->task = $task;
     }
 
-    public function getAllTasks(): array
+    public function getAllTasks(?string $status = null): array
     {
-        return $this->task->select(self::TASK_FIELDS)
-            ->orderBy('created_at', 'desc')
+        return Task::select(self::TASK_FIELDS)
+            ->when($status, function ($query, $status) {
+                return $query->where('status', $status);
+            })
             ->get()
             ->toArray();
     }
