@@ -1,14 +1,19 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import { Button } from '@/components/ui/button';
-
+import { onMounted } from 'vue';
+import { useTaskStore } from '@/stores/task-store';
 import TaskCard from '@/components/TaskCard.vue';
 
+const taskStore = useTaskStore();
+
+onMounted(() => {
+    taskStore.fetchTasksDone();
+});
 </script>
 
 <template>
     <main class="space-y-4">
-        <TaskCard id="1" title="Concluída 1" description="Descrição da tarefa 1" completed="false" />
-        <TaskCard id="2" title="Concluída 2" description="Descrição da tarefa 2" completed="false" />
+        <div v-if="taskStore.tasksDone.length === 0">Carregando tarefas...</div>
+        <TaskCard v-for="task in taskStore.tasksDone" :key="task.id" :id="task.id" :title="task.title"
+            :description="task.description" :status="task.status" />
     </main>
 </template>
