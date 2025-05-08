@@ -144,6 +144,7 @@ Atenção: Verifique se o backend está rodando na porta `8000`, pois o frontend
         <li>Rotas versionadas (<code>/v1/tasks</code>)</li>
         <li>Consultas otimizadas no banco de dados</li>
         <li>Flags no frontend para evitar requisições redundantes</li>
+        <li>Design responsivo no frontend, seguindo método mobile first</li>
         <li>Variáveis no Postman + testes automatizados para encontrar possíveis bugs após updates</li>
     </ul>
 </details>
