@@ -75,11 +75,17 @@ cd api
 composer install
 ```
 
+5. Crie o arquivo `.env` na raiz do projeto `taskify/api/.env` e copie os valores do arquivo `.env.example`:
 ```
-npm install
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+...
 ```
 
-5. Configure o seu banco de dados em `.env`
+6. Configure o seu banco de dados em `.env`:
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -88,13 +94,15 @@ DB_DATABASE=taskify_api
 DB_USERNAME=root
 DB_PASSWORD=123456789
 ```
+Não se esqueça de fornece a senha caso possua.
 
-6. Execute o comando para dados iniciais
+7. Execute o comando para dados iniciais
 ```bash
 php artisan migrate --seed
 ```
+Caso receba uma pergunta do tipo `Would you like to create it?`, digite `yes`.
 
-7. Na pasta da sua aplicação, execute o comando:
+8. Na pasta da sua aplicação, execute o comando:
 ```bash
 php artisan serve
 ```
@@ -122,6 +130,7 @@ npm run dev
 ```bash
 http://localhost:5173/
 ```
+Atenção: Verifique se o backend está rodando na porta `8000`, pois o frontend irá consumir nesta porta.
 
 <br>
 
