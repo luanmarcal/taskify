@@ -1,37 +1,52 @@
-<script setup>
-import { RouterLink } from 'vue-router';
+<script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, Trash, Pencil, EyeOff } from 'lucide-vue-next';
 import { useTaskStore } from '@/stores/task-store';
 import { ref } from 'vue'
+import type { TaskResponseInterface } from '@/stores/task-store';
+import { useRouter } from 'vue-router';
 
-defineProps({
-    id: Number,
-    title: String,
-    description: String,
-    status: String,
-});
+const props = defineProps<{
+    task: TaskResponseInterface;
+}>();
 
-const showTask = ref(false);
+const router = useRouter();
+const showTask = ref(false as number | boolean);
 
-const handleChange = (taskId, status) => {
+const handleChange = (taskId: number | undefined, status: string | undefined) => {
+    if (taskId === undefined) return;
+    if (status === undefined) return;
+
     const taskStore = useTaskStore();
     console.log(taskId, status);
     status = status === 'done' ? 'pending' : 'done';
     taskStore.updateTaskStatus(taskId, status);
 };
 
-const handleShow = (taskId) => {
+const handleShow = (taskId: number | boolean | undefined) => {
+    if (taskId === undefined) return;
     showTask.value = showTask.value === taskId ? false : taskId;
 };
 
-const handleEdit = (taskId) => {
-    // const taskStore = useTaskStore();
-    // taskStore.setTaskToEdit(taskId);
+const handleEdit = (taskToEdit: TaskResponseInterface) => {
+    if (!taskToEdit) return;
+
+    router.push({
+        path: '/todo-list/edit-task',
+        query: {
+            id: taskToEdit.id,
+            title: taskToEdit.title,
+            description: taskToEdit.description,
+            status: taskToEdit.status
+        }
+    });
 };
 
-const handleDelete = (taskId) => {
+
+
+const handleDelete = (taskId: number | undefined) => {
+    if (taskId === undefined) return;
     const taskStore = useTaskStore();
     taskStore.deleteTask(taskId);
 };
@@ -44,38 +59,39 @@ const handleDelete = (taskId) => {
                 <div class="flex flex-row justify-between bg-secondary text-secondary-foreground rounded-2xl">
                     <!-- Checkbox e título -->
                     <div class="flex items-center space-x-2">
-                        <Checkbox id="checkbox" class="cursor-pointer bg-white" :model-value="status === 'done'"
-                            @update:model-value="handleChange(id, status)" />
+                        <Checkbox id="checkbox" class="cursor-pointer bg-white"
+                            :model-value="props.task.status === 'done'"
+                            @update:model-value="handleChange(props.task.id, props.task.status)" />
 
                         <p class="font-bold text-lg truncate overflow-hidden whitespace-nowrap max-w-[10vw]"
-                            :title="title">
-                            {{ title }}
+                            :title="props.task.title">
+                            {{ props.task.title }}
                         </p>
 
                     </div>
 
                     <!-- Botões de ação -->
                     <div class="flex items-center space-x-2">
-                        <Button variant="secondary" class="cursor-pointer bg-white border" size="icon"
-                            @click="handleShow(id)">
-                            <Eye v-if="showTask !== id" />
+                        <Button v-if="props.task?.description" variant="secondary" class="cursor-pointer bg-white border"
+                            size="icon" @click="handleShow(props.task.id)">
+                            <Eye v-if="showTask !== props.task.id" />
                             <EyeOff v-else />
                         </Button>
                         <Button variant="secondary" class="cursor-pointer bg-white border" size="icon"
-                            @click="handleEdit(id)">
+                            @click="handleEdit(props.task)">
                             <Pencil />
                         </Button>
                         <Button variant="secondary" class="cursor-pointer bg-white border" size="icon"
-                            @click="handleDelete(id)">
+                            @click="handleDelete(props.task.id)">
                             <Trash />
                         </Button>
                     </div>
                 </div>
 
                 <!-- Descrição -->
-                <div v-if="showTask === id" class="flex flex-col items-start p-4">
+                <div v-if="showTask === props.task.id" class="flex flex-col items-start p-4">
                     <p class="text-s break-words">
-                        {{ description }}
+                        {{ props.task.description }}
                     </p>
                 </div>
             </div>

@@ -1,20 +1,24 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { toast } from 'vue-sonner';
 
 export const API_URL = 'http://localhost:8000/api/v1';
 
 export interface TaskInterface {
-    id: number;
     title: string;
     description: string;
     status: string;
 }
 
+export interface TaskResponseInterface extends TaskInterface {
+    id: number;
+}
+
 export const useTaskStore = defineStore('taskStore', {
     state: () => ({
-        tasksPending: [] as TaskInterface[],
-        tasksDone: [] as TaskInterface[],
-        tasks: [] as TaskInterface[],
+        tasksPending: [] as TaskResponseInterface[],
+        tasksDone: [] as TaskResponseInterface[],
+        tasks: [] as TaskResponseInterface[],
         isPendingLoaded: false,
         isDoneLoaded: false,
         isTasksLoaded: false
@@ -36,8 +40,10 @@ export const useTaskStore = defineStore('taskStore', {
                 const response = await axios.get(`${API_URL}/tasks?status=pending`);
                 this.tasksPending = response.data.data;
                 this.isPendingLoaded = true;
+                toast.success('Tasks pendentes carregadas com sucesso!');
             } catch (error) {
                 console.error('Erro ao buscar as tasks pendentes:', error);
+                toast.error('Erro ao buscar as tasks pendentes!');
             }
         },
         async fetchTasksDone() {
@@ -46,8 +52,10 @@ export const useTaskStore = defineStore('taskStore', {
                 const response = await axios.get(`${API_URL}/tasks?status=done`);
                 this.tasksDone = response.data.data;
                 this.isDoneLoaded = true;
+                toast.success('Tasks concluídas carregadas com sucesso!');
             } catch (error) {
                 console.error('Erro ao buscar as tasks concluídas:', error);
+                toast.error('Erro ao buscar as tasks concluídas!');
             }
         },
         async updateTaskStatus(taskId: number, status: string) {
@@ -75,8 +83,10 @@ export const useTaskStore = defineStore('taskStore', {
                 if (response.status !== 200) {
                     throw new Error('Erro ao atualizar o status da task');
                 }
+                toast.success('Status da task atualizado com sucesso!');
             } catch (error) {
                 console.error('Erro ao atualizar o status da task:', error);
+                toast.error('Erro ao atualizar o status da task!');
             }
         },
         async deleteTask(taskId: number) {
@@ -96,8 +106,52 @@ export const useTaskStore = defineStore('taskStore', {
                 if (response.status !== 200) {
                     throw new Error('Erro ao deletar a task');
                 }
+                toast.success('Task deletada com sucesso!');
             } catch (error) {
                 console.error('Erro ao deletar a task:', error);
+                toast.error('Erro ao deletar a task!');
+            }
+        },
+        async addTask(task: TaskInterface) {
+            try {
+                const response = await axios.post(`${API_URL}/tasks`, task);
+                this.tasks.push(response.data.data);
+                this.tasksPending.push(response.data.data);
+                toast.success('Task adicionada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao adicionar a task:', error);
+                toast.error('Erro ao adicionar a task!');
+            }
+        },
+        async editTask(taskId: number, updatedTask: TaskInterface) {
+            try {
+                const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
+
+                if (taskIndex === -1) {
+                    throw new Error('Task não encontrada');
+                }
+
+                const updatedTaskWithId = { ...updatedTask, id: taskId };
+                this.tasks[taskIndex] = updatedTaskWithId;
+
+                if (updatedTaskWithId.status === 'pending') {
+                    this.tasksPending = this.tasksPending.filter(task => task.id !== taskId);
+                    this.tasksPending.push(updatedTaskWithId);
+                } else if (updatedTaskWithId.status === 'done') {
+                    this.tasksDone = this.tasksDone.filter(task => task.id !== taskId);
+                    this.tasksDone.push(updatedTaskWithId);
+                }
+
+                const response = await axios.put(`${API_URL}/tasks/${taskId}`, updatedTask);
+
+                if (response.status !== 200) {
+                    throw new Error('Erro ao editar a task');
+                }
+
+                toast.success('Task editada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao editar a task:', error);
+                toast.error('Erro ao editar a task!');
             }
         },
     },

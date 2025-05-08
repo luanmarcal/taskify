@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -20,17 +20,11 @@ onMounted(() => {
 <template>
     <main class="flex flex-col items-center justify-center space-y-8">
 
-        <RouterLink to="/">
-            <Button class="cursor-pointer" variant="ghost">
-                <h1 class="text-3xl font-semibold font-righteous">Taskify</h1>
-            </Button>
-        </RouterLink>
-
-        <div class="flex flex-col shadow-xl w-[80vw] h-[80vh] rounded-2xl p-4 bg-white max-w-5xl">
+        <div class="flex flex-col w-[80vw] h-[80vh] rounded-2xl p-4 max-w-5xl">
             <div class="justify-around items-center my-4">
-                <RouterLink to="/todo-list">
-                    <Button class="font-bold rounded-2xl cursor-pointer w-full" variant="default">
-                        <Plus class=" w-4 h-4" />
+                <RouterLink to="/todo-list/add-task">
+                    <Button class="font-bold rounded-2xl cursor-pointer w-full min-h-[4vh] p-4" variant="default">
+                        <Plus class=" w-6 h-6" />
                         <p class="font-bold">
                             Adicionar Tarefa
                         </p>
