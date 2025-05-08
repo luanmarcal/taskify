@@ -17,7 +17,7 @@ onMounted(() => {
         <div v-if="taskStore.tasksDone.length === 0 && taskStore.isDoneLoaded"
             class="flex justify-center item-center flex-col opacity-80">
             <p class="font-semibold text-lg max-w-xs self-center">
-                Lista de tarefas pendentes vazia...
+                Lista de tarefas completas vazia...
             </p>
             <img src="@/assets/empty-list.png" alt="Lista vazia" class="max-w-3xs self-center" />
         </div>
