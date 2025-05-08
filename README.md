@@ -49,8 +49,8 @@ A documentação da API está disponível via Postman.
 - [Postman](https://documenter.getpostman.com/view/43696728/2sB2j7epuk)
 
 Na pasta `docs` você pode encontrar os arquivos para importar no postman:
-- [Collection](https://github.com/luanmarcal/taskify/docs/taskify.postman_collection.json)
-- [Environment](https://github.com/luanmarcal/taskify/docs/taskify-test.postman_environment.json)
+- [Collection](https://github.com/luanmarcal/taskify/blob/main/docs/taskify.postman_collection.json)
+- [Environment](https://github.com/luanmarcal/taskify/blob/main/docs/taskify-test.postman_environment.json)
 
 Após importar, você poderá visualizar e testar todos os endpoints da API diretamente pelo Postman, existem testes automatizados para isso, basta rodar.
 
