@@ -27,6 +27,7 @@ class TaskService implements TaskServiceInterface
 
     public function createTask(array $data): array
     {
+        $data['description'] = $data['description'] ?? '';
         $task = $this->task->create($data);
 
         return $task->only(self::TASK_FIELDS);
@@ -41,6 +42,7 @@ class TaskService implements TaskServiceInterface
 
     public function updateTask(string $id, array $data): array
     {
+        $data['description'] = $data['description'] ?? '';
         $task = $this->task->findOrFail($id);
         $task->update($data);
 
